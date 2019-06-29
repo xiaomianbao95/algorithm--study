@@ -1,0 +1,59 @@
+//2091.3.9
+package algorithmexec;
+
+import java.util.Scanner;
+
+public class Getlargestlen2 {
+	/*
+	 * 给出长度为N的数组，找出这个数组的最长递增子序列和长度。 
+(递增子序列是指，子序列的元素是递增的） 
+例如：5 1 6 8 2 4 5 10，最长递增子序列是1 2 4 5 10。长度为5
+构造一个辅助数组，遍历array和辅助数组末尾的数x比较
+1.array[i]>x,将array[i]放在辅助数组x得后一个
+2.array[i]<x,在辅助数组中二分查找第一个大于等于array[i]的数,并用array[i]替换这个数
+	 */
+
+	@SuppressWarnings("resource")
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Scanner sca=new Scanner(System.in);
+		int n=sca.nextInt();//输入数组长度
+		int array[]=new int[n];	
+		int assistarray[]=new int[n];//辅助数组
+		for(int i=0;i<n;i++) {//输入数组
+			array[i]=sca.nextInt();
+		}
+		assistarray[0]=array[0];
+		int length=0;
+		for(int i=1;i<n;i++) {
+			if(assistarray[length]<array[i]) {
+				assistarray[++length]=array[i];
+			}else {
+				int start=0;
+				int end=length;
+				while(start<end) {
+					int mid=(start+end)/2;
+					if(assistarray[mid]<array[i]) {
+						start=mid+1;
+					}else {
+						end=mid-1;
+					}
+				}
+				if(assistarray[start]<array[i]&&(start+1)<assistarray.length) {
+					assistarray[start+1]=array[i];
+				}else {
+					assistarray[start]=array[i];
+				}
+				
+			}
+		}
+		for(int tem:assistarray) {
+			
+			System.out.println(tem);
+		}
+		System.out.println("最长递增子序列长度为："+(length+1));
+		
+
+	}
+
+}
