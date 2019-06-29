@@ -1,0 +1,60 @@
+//2019.3.9
+package algorithmexec;
+
+import java.util.Scanner;
+
+/*
+ * 给出两个单词word1和word2，计算出将word1 转换为word2的最少操作次数。
+
+你总共三种操作方法：
+
+插入一个字符
+删除一个字符
+替换一个字符
+状态定义：dp[i][j]表示从word1的第i个字符转换到word2的第j个字符需要的最少操作次数
+状态转移方程:
+1.当第i个字符等于第j个字符时：dp[i][j]=dp[i-1][j-1];
+2.当第i个字符不等于第j个字符时，我们要考虑三种情况，添加dp[i][j]=dp[i][j-1]+1;删除：dp[i][j]=dp[i-1][j];修改：dp[i][j]=dp[i-1][j-1];
+所以：dp[i][j]=min{dp[i][j-1],dp[i-1][j],dp[i-1][j-1]}+1
+
+ */
+
+public class Mindistance {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		@SuppressWarnings("resource")
+		Scanner scan =new Scanner(System.in);
+		String astr=scan.nextLine();
+		String bstr=scan.nextLine();
+		int alen=astr.length();
+		int blen=bstr.length();
+		int[][] dp=new int[alen+1][blen+1];
+		
+		for(int i=0;i<alen;i++) {
+			//从i个字符变成0个字符，需要i步（删除）
+			dp[i][0]=i;
+		}
+		for(int i=0;i<blen;i++) {
+			//从0个字符变成i个字符，需要i步（添加）
+			dp[0][i]=i;
+		}
+		
+		for(int i=1;i<alen+1;i++) {
+			for(int j=1;j<blen+1;j++) {
+				//当相同时，
+				if(astr.charAt(i-1)==bstr.charAt(j-1)) {
+					dp[i][j]=dp[i-1][j-1];
+				}else {
+					//当不相同时，我们需要三种操作的最小值
+					//其中dp[i-1][j]表示删除，[i-1][j-1]表示修改，dp[i][j-1])表示添加
+					dp[i][j]=Math.min(dp[i-1][j], Math.min(dp[i-1][j-1],dp[i][j-1]))+1;
+				}
+			}
+		}
+		System.out.println(dp[alen][blen]);
+	
+
+	}
+
+}
