@@ -1,0 +1,91 @@
+棋盘覆盖问题：
+
+package algorithm;
+/*
+ * 棋盘覆盖问题，2019.6.29
+ */
+
+public class ChessProblem {
+	
+	private int size;//棋盘尺寸
+	private int matrixrow;//矩阵开始的横坐标
+	private int matrixcol;//矩阵开始的列坐标
+	private int specialrow;//特殊点横坐标
+	private int specialcol;//特殊点列坐标
+	int[][] chess;//棋盘
+	int number=0;//number作为全局变量记录第几个L去覆盖
+	
+	
+	public ChessProblem(int matrixrow,int matrixcol,int specialrow,int specialcol,int size) {
+		this.matrixrow=matrixrow;
+		this.matrixcol=matrixcol;
+		this.specialrow=specialrow;
+		this.specialcol=specialcol;
+		this.size=size;
+		chess=new int [size][size];
+	}
+	
+	public void setchess(int matrixrow,int matrixcol,int specialrow,int specialcol,int size) {
+		if(size==1)
+			return;
+		number++;
+		int subsize=size/2;
+		int n=number;
+		//特殊点在左上方
+		if(specialrow<matrixrow+subsize&&specialcol<matrixcol+subsize) {
+			setchess(matrixrow,matrixcol,specialrow,specialcol,subsize);
+		}else {
+			//特殊点不在左上方，就把左上方小矩阵的右下角那个点用现在的n覆盖成特殊点
+			chess[matrixrow+subsize-1][matrixcol+subsize-1]=n;
+			//在左上方这个小矩阵里，从这个小矩阵的左上角开始加上刚刚覆盖的特殊点继续递归覆盖完其他的
+			setchess(matrixrow,matrixcol,matrixrow+subsize-1,matrixcol+subsize-1,subsize);
+		}
+		//特殊点在左下方
+		if(specialrow>=matrixrow+subsize&&specialcol<matrixcol+subsize) {
+			setchess(matrixrow+subsize,matrixcol,specialrow,specialcol,subsize);		
+		}else {
+			//特殊点不在左下方，那就把左下方小矩阵的右上角那个点用现在的n覆盖成特殊点
+			chess[matrixrow+subsize][matrixcol+subsize-1]=n;
+			//在左下方这个小矩阵里从这个小矩阵的左上角开始，加上刚刚覆盖的特殊点再递归继续覆盖
+			setchess(matrixrow+subsize,matrixcol,matrixrow+subsize,matrixcol+subsize-1,subsize);
+		}
+		//特殊点在右上方
+		if(specialrow<matrixrow+subsize&&specialcol>=matrixcol+subsize) {
+			setchess(matrixrow,matrixcol+subsize,specialrow,specialcol,subsize);
+		}else {
+			//特殊点不在右上方，那就把右上方矩阵的左下角那个点用现在的n覆盖成特殊点
+			chess[matrixrow+subsize-1][matrixcol+subsize]=n;
+			//在右上方这个小矩阵里从这个小矩阵的左上角开始，加上刚刚覆盖的特殊点继续递归把所有的覆盖完
+			setchess(matrixrow,matrixcol+subsize,matrixrow+subsize-1,matrixcol+subsize,subsize);
+		}
+		//特殊点在右下方
+		if(specialrow>=matrixrow+subsize&&specialcol>=matrixcol+subsize) {
+			setchess(matrixrow+subsize,matrixcol+subsize,specialrow,specialcol,subsize);
+		}else {
+			//特殊点不在右下方，那就把右下方矩阵的左上角那个点用现在的n覆盖成特殊点
+			chess[matrixrow+subsize][matrixcol+subsize]=n;
+			//在右下方这个小矩阵里从这个矩阵的左上角开始，加上刚刚覆盖的特殊点继续递归吧所有的覆盖完
+			setchess(matrixrow+subsize,matrixcol+subsize,matrixrow+subsize,matrixcol+subsize,subsize);
+		}
+	}
+	
+	public void printchess(int matrixrow,int matrixcol,int specialrow,int specialcol,int size) {
+		setchess(matrixrow,matrixcol,specialrow,specialcol,size);
+		for(int i=0;i<chess.length;i++) {
+			for(int j=0;j<chess.length;j++) {
+				System.out.print(chess[i][j]+" ");
+			}
+			System.out.println();
+		}
+	}
+
+	
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		ChessProblem cp=new ChessProblem(0,0,7,4,8);
+		cp.printchess(0,0,7,4,8);
+
+	}
+
+}
