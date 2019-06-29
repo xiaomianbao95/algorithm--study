@@ -1,0 +1,72 @@
+package project;
+
+import java.util.Scanner;
+
+/*
+ * 2019.4.30
+ * 输入描述：输入9行，每行为空格隔开的9个数字，为0的地方就是需要填充的。
+ * 输出描述：输出九行，每行九个空格隔开的数字，为解出的答案。
+ * 1.先把有数字的地方在rows,cols,blocks中相应的位置设置为true,
+ * 2.遍历二维数组找为0的，也就是需要填数的，然后从0-9找合适的数字填入（该数字必须在rows,blocks,cols中相应位置没有出现过）找到合适的l，然后
+ * l+1赋给a[i][j],然后继续深度遍历为true,就返回true,否则回溯a[i][j]=0,然后试下一个数字是否合适，直到0-9都不合适返回false,回到上一层，如果没有、
+ * 为0的说明所有已经填完，返回true.
+ */
+  
+public class ShuduTest {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Scanner s=new Scanner(System.in);
+		while(s.hasNextInt()) {
+			int[][] a=new int[9][9];
+			boolean[][] rows=new boolean[9][9];//说明行的一个矩阵
+			boolean[][] cols=new boolean[9][9];//说明列的一个矩阵
+			boolean[][] blocks=new boolean[9][9];//说明九大九宫格的矩阵
+			
+			for(int i=0;i<a.length;i++) {//开始构造初始数独
+				for (int j = 0; j < a.length; j++) {
+					a[i][j]=s.nextInt();
+					if(a[i][j]!=0) {
+						int k=i/3*3+j/3;
+						int val=a[i][j]-1;
+						rows[i][val]=true;
+						cols[j][val]=true;
+						blocks[k][val]=true;
+					}
+				}
+			}//数据装载完毕
+			DFS(a,rows,cols,blocks);//DFS深度检测填数+回溯法
+			for (int i = 0; i < 9; i++) {//输出填完的数独，每个数字中间留空格，并且一行完事要换行。
+				for (int j = 0; j < 8; j++) {
+					System.out.print(a[i][j]+" ");
+				}
+				System.out.println(a[i][8]);
+				
+			}
+		}
+
+	}
+	public static boolean DFS(int[][] a, boolean[][] rows,boolean[][] cols,boolean[][] blocks) {
+		for (int i = 0; i < a.length; i++) {
+			for (int j = 0; j < a.length; j++) {
+				if(a[i][j]==0) {
+					int k=i/3*3+j/3;//算该位置在九大九宫格里应该属于第几宫格，在9*9矩阵里，换算成一行代表一个宫格
+					for (int l = 0; l < 9; l++) {//从1-9里一个一个试哪个填入合适
+						if(rows[i][l]==false&&cols[j][l]==false&&blocks[k][l]==false) {
+							a[i][j]=l+1;//应该填入的数是当前的l+1;
+							rows[i][l]=true;cols[j][l]=true;blocks[k][l]=true;//填完数后要把该数所在的行列大宫格
+							                                                  //里的相应位置设置为true，表示该数已经填过
+							if(DFS(a,rows,cols,blocks))  return true;//继续递归DFS为其他为0的位置填入合适的数，直到填完，再一层层退出来
+ 							rows[i][l]=cols[j][l]=blocks[k][l]=false;//若DFS返回false,说明刚才设置的数不合适，把刚才的行列大宫格返回false
+							a[i][j]=0;                 //标记，并且刚才位置a[i][j]返成0，重新为它寻找下一个合适的数，这就是回溯，即回到之前的状态
+							                           //重新为它寻找合适的。
+						}
+					}
+					return false;//若某一个a[i][j]==0,l从1-9都没有给他找到合适的数，返回上一层（回溯），上一层的数的重新寻找合适的
+				}
+			}
+		}
+		return true;//所有的a[i][j]==0都填入了合适的数，返回true.
+	}
+
+}
