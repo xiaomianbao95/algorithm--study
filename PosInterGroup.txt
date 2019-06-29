@@ -1,0 +1,58 @@
+//2019.3.11
+package algorithmexec;
+
+import java.util.Scanner;
+
+public class PosInterGroup {
+	/*
+	 * 将一堆正整数分为2组，要求2组的和相差最小。 
+例如：1 2 3 4 5，将1 2 4分为1组，3 5分为1组，两组和相差1，是所有方案中相差最少的。
+把一组正整数分成两组和相差最小，则，有一组数大于sum/2,有一组数的和肯定小于sum/2,想使他们相差最小，我们就要使得偏小的一组数的总和不大于sum/2且总和最大，又类似于背包问题
+我们要从这组数中选出几个数要使得他们的总和不大于sum/2且总和最大
+f[j]表示总和不大于j的一组数的总和
+当array[i]<j时，我们要比较选择array[i]和不选择array[i]时和总和谁大即f[j]=max{f[j],f[j-array[i]]+array[i]}
+	 */
+
+	@SuppressWarnings("resource")
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Scanner sca=new Scanner(System.in);
+		int n=sca.nextInt();
+		int[] array=new int[n+1];
+		int sum=0;
+		
+		for(int i=1;i<n+1;i++) {
+			array[i]=sca.nextInt();
+		    sum+=array[i];
+		}
+		//第一种
+		int mid=sum/2;
+		int[] f=new int[mid+1];
+		for(int i=1;i<n+1;i++) {
+			for(int j=0;j<=mid;j++) {
+				if(array[i]<=j) {
+					f[j]=Math.max(f[j], f[j-array[i]]+array[i]);
+				}
+			}
+		}
+		//第二种dp[][]
+//		int mid=sum/2;
+//		int[][] dp=new int[n+1][mid+1];
+//		for(int i=1;i<=n;i++) {
+//			for(int j=0;j<=mid;j++) {
+//				if(array[i]<=j) {
+//					dp[i][j]=Math.max(dp[i-1][j], dp[i-1][j-array[i]]+array[i]);
+//				}else {
+//					dp[i][j]=dp[i-1][j];
+//				}
+//			}
+//		}
+//		
+		
+
+//		System.out.println(sum-dp[n][mid]-dp[n][mid]);
+		System.out.println(sum-f[mid]-f[mid]);
+
+	}
+
+}
