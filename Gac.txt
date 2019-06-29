@@ -1,0 +1,46 @@
+package algorithm;
+
+import java.util.Scanner;
+
+/*
+ * 欧几里德法 又叫辗转相除法 2019.6.26
+ */
+public class Gac {
+	//最大公约数
+	public int gac(int a,int b) {
+		if(a<b)
+			swap(a,b);
+		if(b==0)
+			return a;
+		return gac(b,a%b);
+	}
+	public void swap(int a,int b) {
+		int temp=a;
+		a=b;
+		b=temp;
+	}
+	//最大公倍数
+	public int gac1(int a,int b) {
+		
+		int n=gac(a,b);
+		
+		return a*(b/n);
+	}
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Scanner sc=new Scanner(System.in);
+		System.out.print("请输入第一个数：");
+		int a=sc.nextInt();
+		
+		System.out.print("请输入第二个数：");
+		int b=sc.nextInt();
+		Gac g=new Gac();
+		int result=g.gac(a, b);
+		System.out.println("a和b的最大公约数为："+result);
+		int result2=g.gac1(a, b);
+		System.out.println("a和b的最大公倍数："+result2);
+
+	}
+
+}
