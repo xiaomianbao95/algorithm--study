@@ -1,0 +1,39 @@
+package algorithm;
+
+import java.util.Scanner;
+
+/*
+ * 汉诺塔 2019.6.26
+ */
+
+public class Hanoi {
+	static int m=0;
+	public void move(int disks,char N,char M) {
+		System.out.println("第"+(++m)+"次移动："+"把"+disks+"号盘子从"+N+"移动到"+M);
+	}
+	public void hanoi(int n,char A,char B,char C) {
+		if(n==1) {
+			move(n,A,C);
+		}else {
+			hanoi(n-1,A,C,B);//把编号为1到n-1个圆盘借助C盘从A移动到B
+			move(n,A,C);//把编号为n的圆盘从A移动到C
+			hanoi(n-1,B,A,C);//把编号为1-n-1个圆盘借助A从B移动到C
+		}
+	}
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		char A='A';
+		char B='B';
+		char C='C';
+		System.out.println("汉诺塔问题：把A塔上编号从小号到大号的圆盘从A塔通过B辅助塔移动到C塔上去");
+		Scanner sc=new Scanner(System.in);
+		System.out.print("请输入圆盘个数：");
+		int n=sc.nextInt();
+		Hanoi h=new Hanoi();
+		h.hanoi(n, A, B, C);
+		System.out.println("移动了"+m+"次把A塔圆盘都移动到了C塔");
+
+	}
+
+}
