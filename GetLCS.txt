@@ -1,0 +1,52 @@
+//2019.3.11
+package algorithmexec;
+
+import java.util.Scanner;
+
+/*
+ * 给出两个字符串A B，求A与B的最长公共子序列（子序列不要求是连续的）。 
+比如两个串为：
+abcicba 
+abdkscab
+ab是两个串的子序列，abc也是，abca也是，其中abca是这两个字符串最长的子序列。
+dp[i][j]字符串A的前i的字符中和字符串B中前j个字符中的最长公共子序列
+状态转移：A[i]=B[j]，dp[i][j]=dp[i-1][j-1]+1;
+A[i]!=B[j],dp[i][j]=max{dp[i][j-1],dp[i-1][j]};
+注意charAt()中第一个字符是在索引0处。
+ */
+
+public class GetLCS {
+
+	@SuppressWarnings("resource")
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Scanner sca=new Scanner(System.in);
+		String astr=sca.nextLine();
+		String bstr=sca.nextLine();
+		int alen=astr.length();
+		int blen=bstr.length();
+		int dp[][]=new int [alen+1][blen+1];
+		
+		for(int i=0;i<alen+1;i++) {//初始化dp矩阵都为0
+			dp[i][0]=0;
+		}
+		for(int j=0;j<blen+1;j++) {
+			dp[0][j]=0;
+		}
+		
+		
+		
+		for(int i=1;i<alen+1;i++) {
+			for(int j=1;j<blen+1;j++) {
+				if(astr.charAt(i-1)==bstr.charAt(j-1)) {
+					dp[i][j]=dp[i-1][j-1]+1;
+				}else {
+					dp[i][j]=Math.max(dp[i][j-1], dp[i-1][j]);
+				}		
+			}
+		}
+		System.out.println(dp[alen][blen]);
+
+	}
+
+}
