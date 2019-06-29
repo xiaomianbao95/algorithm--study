@@ -1,0 +1,48 @@
+//2019.3.9
+package algorithmexec;
+
+import java.util.Scanner;
+
+/*
+ * 在N件物品取出若干件放在容量为W的背包里，每件物品的体积为W1，W2……Wn（Wi为整数），与之相对应的价值为P1,P2……Pn（Pi为整数）。求背包能够容纳的最大价值。
+ * 状态：dp[i][j]前i件物品放在容量为j的背包能获得的最大价值
+ * 状态转移：1.当要放入的物品重量大于当前背包容量j时，我们就不放这个物品了，此时dp[i][j]=dp[i-1][j];
+ * 2.当要放入的物品重量小于等于当前背包容量j时，我们要考虑放和不放所能获得价值谁大即比较dp[i-1][j]和dp[i-1][j-weight[i]]+price[i]
+ * 所以：dp[i][j]=max{dp[i-1][j],dp[i-1][j-weight[i]]+price[i]};
+ */
+
+public class BackPackage {
+
+	@SuppressWarnings("resource")
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Scanner sca = new Scanner(System.in);
+		int n=sca.nextInt();//物品数
+		int W=sca.nextInt();//背包容量
+		int [] weight=new int[n+1];//每件物品的重量
+		int [] price=new int[n+1];//每件物品的价值
+		
+		int dp[][]=new int[n+1][W+1];//背包矩阵
+		for(int i=1;i<n+1;i++) {
+			weight[i]=sca.nextInt();//输入每件物品重量
+			price[i]=sca.nextInt();//输入每件物品价值
+		}
+		for(int i=0;i<=W;i++) {//0件物品放在每个i容量背包价值都为0
+			dp[0][i]=0;
+		}
+		for(int i=0;i<=n;i++) {//每件物品放入容量为0的背包价值都为0
+			dp[i][0]=0;
+		}
+		for(int i=1;i<n+1;i++) {
+			for(int j=1;j<W+1;j++) {
+				if(weight[i]<=j) {
+					dp[i][j]=Math.max(dp[i-1][j], dp[i-1][j-weight[i]]+price[i]);
+				}else {
+					dp[i][j]=dp[i-1][j];
+				}
+			}
+		}
+		System.out.println(dp[n][W]);
+	}
+
+}
