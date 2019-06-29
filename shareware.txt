@@ -1,0 +1,51 @@
+package algorithm;
+/*
+ * 2019.6.27 泊松汾酒
+ * 规则：
+ * 1.大瓶子只能倒入中瓶子（只有当中瓶为空时）；
+ * 2.中瓶只能倒入小瓶（当小瓶未满时）；
+ * 3.小瓶只能倒入大瓶子（只有当小瓶子满的时候）。
+ * 
+ * 
+ */
+
+public class ShareWare {
+	private static int a=12;
+	private static int b=8;
+	private static int c=5;
+	private static int m=6;
+	public void backbottle(int A,int B,int C) {
+		if(A==m||B==m||C==m) {
+			System.out.println("酒分好了："+m);
+			return;
+		}
+			
+		if(B==0) {
+			if(A<=b) {
+				backbottle(0,A,C);
+			}else {
+				backbottle(A-b,b,C);
+			}
+		}else if(B!=0&&C!=c) {
+			if(B+C<=c) {
+				backbottle(A,0,B+C);
+			}else {
+				backbottle(A,B+C-c,c);
+			}
+		}else if(C==c) {
+			if(A+C<=a) {
+				backbottle(A+C,B,0);
+			}else {
+				backbottle(a,B,A+C-a);
+			}
+		}
+	}
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		ShareWare s=new ShareWare();
+		s.backbottle(12, 0, 0);
+
+	}
+
+}
