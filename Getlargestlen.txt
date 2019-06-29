@@ -1,0 +1,47 @@
+//2019.3.9
+package algorithmexec;
+
+import java.util.Scanner;
+/*
+ * 给出长度为N的数组，找出这个数组的最长递增子序列长度。 
+(递增子序列是指，子序列的元素是递增的） 
+例如：5 1 6 8 2 4 5 10，最长递增子序列是1 2 4 5 10。长度为5
+max[i]表示前i个数中的最长递增子序列
+我们对于每一个i遍历j 0=<j<i
+如果array[i]>array[j]并且max[i]<max[j]+1我们就更新max[i]=max[j]+1,
+最后在所有max[i]中找出最大的
+时间复杂度O(n*2)
+ */
+
+public class Getlargestlen {
+
+	@SuppressWarnings("resource")
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Scanner sca=new Scanner(System.in);
+		int n=sca.nextInt();//输入数组长度
+		int max[]=new int[n];//最长递增子序列的数组
+		int [] res=new int[n];
+		for(int i=0;i<n;i++) {
+			res[i]=sca.nextInt();//输入数组
+		}
+		for(int i=0;i<n;i++) {//初始化每个位置的递增数组长度为1
+			max[i]=1;
+		}
+		
+		for(int i=1;i<n;i++) {
+			for(int j=0;j<i;j++) {
+				if(res[i]>res[j]&&max[i]<max[j]+1)
+					max[i]=max[j]+1;
+			}
+		}
+		int maxlen=0;
+		for(int i=0;i<n;i++) {
+			if(max[i]>maxlen)
+				maxlen=max[i];
+		}
+		System.out.println(maxlen);
+
+	}
+
+}
