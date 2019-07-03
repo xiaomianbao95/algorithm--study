@@ -1,0 +1,63 @@
+package algorithm;
+/*
+ * 2019.7.3
+ * 循环赛日程表：有n = 2^k个运动员要进行网球循环赛
+ 3  * 赛程表满足：
+ 4  * 每个选手必须与其他n-1个选手各赛一次
+ 5  * 每个选手一天只能参赛一次
+ 6  * 循环赛在n-1天内结束
+ 思路：将日程表设置成n行n列的表，a[i][j]表示第i个运动员在第j天比赛所遇到的选手，注意每个选手必须与其他n-1个运动员都比赛，并且每个运动员都会比赛n-1天
+ 我们第一列表示第几个远动员，第二列开始表示天数，所以，初始化第一行时，第一个存的是第一个运动，不是0；比如n=4,我们可以建立如下的日程表：
+**********循环赛事日程表************
+1---2---3---4---
+2---1---4---3---
+3---4---1---2---
+4---3---2---1---
+观察表我们可以把这个表分成四个区域，区域1:(0,i),区域2：(0,r+i)区域3：(r,i)区域4：(r,r+i)
+  1   |   2
+  ---------
+  3   |   4
+  我们把区域1的复制到区域4，把区域2复制到区域3，就可以了，从最小的r=1开始，每次以r增加两倍的步伐前进，一直进行，就可以排完日程表。
+ */
+
+public class Roundrobin {
+	
+	public static int[][] table(int k){
+		int n=1<<k;
+		int a[][]=new int[n][n];
+		
+		for(int i=0;i<n;i++) {
+			a[0][i]=i+1;
+		}
+		
+		for(int r=1;r<n;r=2*r) {//外循环为r,因为从最小的间隔开始，把初始化好的第一行所有的天数再复制下一行排好
+			for(int i=0;i<n;i=i+2*r) {
+				copy(a,0,i,r,i+r,r);
+				copy(a,0,r+i,r,i,r);
+			}
+		}
+		return a;
+	}
+	public static void copy(int[][] a,int fromx,int fromy,int tox,int toy,int r) {
+		
+		for(int i=0;i<r;i++) {//在复制每一个小区域时，区域行列为r,要把复制的区域行列都走到，复制到另一个区域
+			for(int j=0;j<r;j++) {
+				a[tox+i][toy+j]=a[fromx+i][fromy+j];
+			}
+		}
+	}
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		int[][] a=table(2); 
+		System.out.println("**********循环赛事日程表************");
+		for(int i=0;i<a.length;i++) {
+			for(int j=0;j<a[0].length;j++) {
+				System.out.print(a[i][j]+"---");			
+			}
+			System.out.println();
+		}
+
+	}
+
+}
